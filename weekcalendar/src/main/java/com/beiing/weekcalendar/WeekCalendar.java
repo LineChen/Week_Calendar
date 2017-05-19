@@ -1,17 +1,20 @@
 package com.beiing.weekcalendar;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
 import com.beiing.weekcalendar.adapter.CalendarPagerAdapter;
 import com.beiing.weekcalendar.adapter.WeekAdapter;
-import com.beiing.weekcalendar.utils.GetViewHelper;
+import com.beiing.weekcalendar.listener.GetViewHelper;
 
 import org.joda.time.DateTime;
 
@@ -22,10 +25,13 @@ import org.joda.time.DateTime;
  */
 
 public class WeekCalendar extends LinearLayout {
+    private static final String TAG = "WeekCalendar";
 
     public static final int DAYS_OF_WEEK = 7;
 
-    private static final String TAG = "WeekCalendar";
+    private int maxCount = 1000;
+    private int centerPosition = maxCount / 2;
+
     /**
      * 日历星期
      */
@@ -36,6 +42,15 @@ public class WeekCalendar extends LinearLayout {
     private ViewPager viewPagerContent;
 
     private GetViewHelper getViewHelper;
+
+    private CalendarPagerAdapter calendarPagerAdapter;
+
+    //-----日历属性
+    private int headerHeight;
+
+    private int headerBgColor;
+
+    private int calendarHeight;
 
 
     public WeekCalendar(Context context) {
@@ -52,17 +67,27 @@ public class WeekCalendar extends LinearLayout {
     }
 
     private void initAttrs(Context context, AttributeSet attrs) {
-
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.WeekCalendar);
+        try {
+            headerHeight = (int) ta.getDimension(R.styleable.WeekCalendar_wc_headerHeight, getResources().getDimension(R.dimen.calender_header_height));
+            headerBgColor = ta.getColor(R.styleable.WeekCalendar_wc_headerBgColor, Color.WHITE);
+            calendarHeight = (int) ta.getDimension(R.styleable.WeekCalendar_wc_calendarHeight, getResources().getDimension(R.dimen.calender_content_height));
+        } finally {
+            ta.recycle();
+        }
     }
 
     private void initView() {
         setOrientation(VERTICAL);
         addHeaderView();
         addWeekView();
+        initWeekViewListenter();
     }
 
     private void addHeaderView() {
         View header =  LayoutInflater.from(getContext()).inflate(R.layout.layout_calender_header, this, false);
+        header.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, headerHeight));
+        header.setBackgroundColor(headerBgColor);
         weekGrid = (GridView) header.findViewById(R.id.grid_week);
         addView(header);
         weekGrid.setAdapter(new WeekAdapter(getViewHelper));
@@ -70,17 +95,42 @@ public class WeekCalendar extends LinearLayout {
 
     private void addWeekView() {
         View calendar = LayoutInflater.from(getContext()).inflate(R.layout.layout_calendar_content, this, false);
+        calendar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, calendarHeight));
         viewPagerContent = (ViewPager) calendar.findViewById(R.id.viewpager_calendar);
         addView(calendar);
         DateTime startDay = new DateTime();
         startDay = startDay.minusDays(startDay.getDayOfWeek());
-        CalendarPagerAdapter calendarPagerAdapter = new CalendarPagerAdapter(getContext(), 100, startDay, getViewHelper);
+        calendarPagerAdapter = new CalendarPagerAdapter(getContext(), maxCount, startDay, getViewHelper);
         viewPagerContent.setAdapter(calendarPagerAdapter);
-        viewPagerContent.setCurrentItem(50);
+        viewPagerContent.setCurrentItem(centerPosition);
+    }
+
+    private void initWeekViewListenter() {
+        viewPagerContent.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     public void setGetViewHelper(GetViewHelper getViewHelper) {
         this.getViewHelper = getViewHelper;
         initView();
     }
+
+    public DateTime getSelectDateTime() {
+        return calendarPagerAdapter.getSelectDateTime();
+    }
+
 }

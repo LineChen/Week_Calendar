@@ -10,6 +10,10 @@
     <com.beiing.weekcalendar.WeekCalendar
         android:id="@+id/week_calendar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        app:wc_headerBgColor="@color/colorAccent"
+        app:wc_headerHeight="60dp"
+        app:wc_calendarHeight="100dp"
+        android:background="#22ff0000"/>
 
 </LinearLayout>

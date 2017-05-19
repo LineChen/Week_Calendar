@@ -1,5 +1,6 @@
 package com.beiing.week_calendar;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -8,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.beiing.weekcalendar.WeekCalendar;
-import com.beiing.weekcalendar.utils.GetViewHelper;
+import com.beiing.weekcalendar.listener.GetViewHelper;
 
 import org.joda.time.DateTime;
 
@@ -23,10 +24,16 @@ public class MainActivity extends AppCompatActivity {
 
         weekCalendar.setGetViewHelper(new GetViewHelper() {
             @Override
-            public View getDayView(int position, View convertView, ViewGroup parent, DateTime dateTime) {
+            public View getDayView(int position, View convertView, ViewGroup parent, DateTime dateTime, boolean select) {
                 TextView tv = new TextView(MainActivity.this);
                 tv.setGravity(Gravity.CENTER);
                 tv.setText(dateTime.toString("MM-dd"));
+                if(dateTime.toString("yyyyMMdd").equals(new DateTime().toString("yyyyMMdd"))){
+                    tv.setTextColor(Color.GREEN);
+                }
+                if(select){
+                    tv.setBackgroundColor(Color.CYAN);
+                }
                 return tv;
             }
 

@@ -1,13 +1,15 @@
 package com.beiing.weekcalendar.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.beiing.weekcalendar.R;
-import com.beiing.weekcalendar.utils.GetViewHelper;
+import com.beiing.weekcalendar.listener.GetViewHelper;
 
 import org.joda.time.DateTime;
 
@@ -21,13 +23,13 @@ import jackwharton_salvage.RecyclingPagerAdapter;
 
 public class CalendarPagerAdapter extends RecyclingPagerAdapter {
 
-    private static final int DAYS_OF_WEEK = 7;
     private Context context;
     private int maxCount;
     private int centerPosition;
     /**本周第一天**/
     private DateTime startDateTime;
     private GetViewHelper getViewHelper;
+    private DateTime selectDateTime;
 
     public CalendarPagerAdapter(Context context, int maxCount, DateTime startDateTime, GetViewHelper getViewHelper) {
         this.context = context;
@@ -35,10 +37,12 @@ public class CalendarPagerAdapter extends RecyclingPagerAdapter {
         this.startDateTime = startDateTime;
         this.getViewHelper = getViewHelper;
         centerPosition = maxCount / 2;
+        selectDateTime = new DateTime();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup container) {
+        Log.e("====", "CalendarPagerAdapter-getView");
         WeekViewHolder viewHolder;
         if(convertView == null){
             convertView = LayoutInflater.from(context).inflate(R.layout.item_calendar, container, false);
@@ -49,8 +53,22 @@ public class CalendarPagerAdapter extends RecyclingPagerAdapter {
         }
         int intervalWeeks = position - centerPosition;
         DateTime start = startDateTime.plusWeeks(intervalWeeks);
-        viewHolder.weekGrid.setAdapter(new DayAdapter(start, getViewHelper));
+        final DayAdapter dayAdapter = new DayAdapter(start, getViewHelper, selectDateTime);
+        viewHolder.weekGrid.setAdapter(dayAdapter);
+        viewHolder.weekGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectDateTime = dayAdapter.getItem(position);
+                dayAdapter.setSelectDateTime(selectDateTime);
+                notifyDataSetChanged();
+            }
+        });
         return convertView;
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 
     @Override
@@ -66,6 +84,7 @@ public class CalendarPagerAdapter extends RecyclingPagerAdapter {
         }
     }
 
-
-
+    public DateTime getSelectDateTime() {
+        return selectDateTime;
+    }
 }
