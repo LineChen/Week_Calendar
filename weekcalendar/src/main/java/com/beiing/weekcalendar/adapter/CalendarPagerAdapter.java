@@ -1,21 +1,15 @@
 package com.beiing.weekcalendar.adapter;
 
 import android.content.Context;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.TextView;
 
 import com.beiing.weekcalendar.R;
+import com.beiing.weekcalendar.utils.GetViewHelper;
 
 import org.joda.time.DateTime;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import jackwharton_salvage.RecyclingPagerAdapter;
 
@@ -33,13 +27,14 @@ public class CalendarPagerAdapter extends RecyclingPagerAdapter {
     private int centerPosition;
     /**本周第一天**/
     private DateTime startDateTime;
+    private GetViewHelper getViewHelper;
 
-    public CalendarPagerAdapter(Context context, int maxCount, DateTime startDateTime) {
+    public CalendarPagerAdapter(Context context, int maxCount, DateTime startDateTime, GetViewHelper getViewHelper) {
         this.context = context;
         this.maxCount = maxCount;
         this.startDateTime = startDateTime;
+        this.getViewHelper = getViewHelper;
         centerPosition = maxCount / 2;
-        Log.e("====", "startDateTime:" + startDateTime);
     }
 
     @Override
@@ -54,35 +49,7 @@ public class CalendarPagerAdapter extends RecyclingPagerAdapter {
         }
         int intervalWeeks = position - centerPosition;
         DateTime start = startDateTime.plusWeeks(intervalWeeks);
-        final List<DateTime> dts = new ArrayList<>(DAYS_OF_WEEK);
-        for (int i = 0; i < DAYS_OF_WEEK; i++) {
-            dts.add(new DateTime(start).plusDays(i));
-        }
-
-        viewHolder.weekGrid.setAdapter(new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return DAYS_OF_WEEK;
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return position;
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return position;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                TextView tv = new TextView(context);
-                tv.setGravity(Gravity.CENTER);
-                tv.setText(dts.get(position).toString("yyyy-MM-dd"));
-                return tv;
-            }
-        });
+        viewHolder.weekGrid.setAdapter(new DayAdapter(start, getViewHelper));
         return convertView;
     }
 
