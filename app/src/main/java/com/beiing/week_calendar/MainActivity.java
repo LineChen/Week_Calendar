@@ -3,7 +3,6 @@ package com.beiing.week_calendar;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         weekCalendar.setGetViewHelper(new GetViewHelper() {
             @Override
             public View getDayView(int position, View convertView, ViewGroup parent, DateTime dateTime, boolean select) {
-                Log.e("====", "getDayView");
                 if(convertView == null){
                     convertView = LayoutInflater.from(MainActivity.this).inflate(R.layout.item_day, parent, false);
                 }
