@@ -47,8 +47,8 @@ public class CalendarPagerAdapter extends RecyclingPagerAdapter {
         WeekViewHolder viewHolder;
         if(convertView == null){
             convertView = LayoutInflater.from(context).inflate(R.layout.item_calendar, container, false);
-            convertView.setTag(new WeekViewHolder(convertView));
             viewHolder = new WeekViewHolder(convertView);
+            convertView.setTag(viewHolder);
         } else {
             viewHolder = (WeekViewHolder) convertView.getTag();
         }
