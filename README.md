@@ -2,7 +2,10 @@
 
 一个按周显示的日历，布局完全自定义。
 
-##使用
+![capture](https://github.com/LineChen/Week_Calendar/week_calendar.gif)
+
+
+## 使用
 
 布局：
 
@@ -117,7 +120,7 @@ weekCalendar.setWeekChangedListener(new WeekChangeListener() {
 
 
 
-#License
+# License
 
 ```
    Copyright 2017 LineChen
