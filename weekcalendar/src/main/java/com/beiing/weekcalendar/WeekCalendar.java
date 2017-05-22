@@ -14,7 +14,10 @@ import android.widget.LinearLayout;
 
 import com.beiing.weekcalendar.adapter.CalendarPagerAdapter;
 import com.beiing.weekcalendar.adapter.WeekAdapter;
+import com.beiing.weekcalendar.listener.CustomPagerChandeListender;
+import com.beiing.weekcalendar.listener.DateSelectListener;
 import com.beiing.weekcalendar.listener.GetViewHelper;
+import com.beiing.weekcalendar.listener.WeekChangeListener;
 
 import org.joda.time.DateTime;
 
@@ -32,6 +35,13 @@ public class WeekCalendar extends LinearLayout {
     private int maxCount = 1000;
     private int centerPosition = maxCount / 2;
 
+    //-----日历属性
+    private int headerHeight;
+
+    private int headerBgColor;
+
+    private int calendarHeight;
+
     /**
      * 日历星期
      */
@@ -41,17 +51,13 @@ public class WeekCalendar extends LinearLayout {
      */
     private ViewPager viewPagerContent;
 
-    private GetViewHelper getViewHelper;
-
     private CalendarPagerAdapter calendarPagerAdapter;
 
-    //-----日历属性
-    private int headerHeight;
+    private GetViewHelper getViewHelper;
 
-    private int headerBgColor;
+    private DateSelectListener dateSelectListener;
 
-    private int calendarHeight;
-
+    private WeekChangeListener weekChangedListener;
 
     public WeekCalendar(Context context) {
         this(context, null);
@@ -86,7 +92,7 @@ public class WeekCalendar extends LinearLayout {
 
     private void addHeaderView() {
         View header =  LayoutInflater.from(getContext()).inflate(R.layout.layout_calender_header, this, false);
-        header.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, headerHeight));
+        header.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, headerHeight));
         header.setBackgroundColor(headerBgColor);
         weekGrid = (GridView) header.findViewById(R.id.grid_week);
         addView(header);
@@ -106,22 +112,21 @@ public class WeekCalendar extends LinearLayout {
     }
 
     private void initWeekViewListenter() {
-        viewPagerContent.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
+        viewPagerContent.addOnPageChangeListener(new CustomPagerChandeListender() {
             @Override
             public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
+                onWeekChange(position);
             }
         });
+
+    }
+
+    private void onWeekChange(int position) {
+        int intervalWeeks = position - centerPosition;
+        DateTime firstDayofWeek = calendarPagerAdapter.getStartDateTime().plusWeeks(intervalWeeks);
+        if(weekChangedListener != null){
+            weekChangedListener.onWeekChanged(firstDayofWeek);
+        }
     }
 
     public void setGetViewHelper(GetViewHelper getViewHelper) {
@@ -129,8 +134,27 @@ public class WeekCalendar extends LinearLayout {
         initView();
     }
 
+    public void setDateSelectListener(DateSelectListener dateSelectListener) {
+        this.dateSelectListener = dateSelectListener;
+        calendarPagerAdapter.setDateSelectListener(dateSelectListener);
+    }
+
+    public void setWeekChangedListener(WeekChangeListener weekChangedListener) {
+        this.weekChangedListener = weekChangedListener;
+    }
+
     public DateTime getSelectDateTime() {
         return calendarPagerAdapter.getSelectDateTime();
+    }
+
+    public void refresh(){
+        calendarPagerAdapter.notifyDataSetChanged();
+    }
+
+    public void gotoDate(DateTime dateTime){
+        viewPagerContent.setCurrentItem(centerPosition);
+        calendarPagerAdapter.setStartDateTime(dateTime.minusDays(dateTime.getDayOfWeek()));
+        onWeekChange(centerPosition);
     }
 
 }

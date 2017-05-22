@@ -58,6 +58,5 @@ public class DayAdapter extends BaseAdapter {
 
     public void setSelectDateTime(DateTime selectDateTime) {
         this.selectDateTime = selectDateTime;
-        notifyDataSetChanged();
     }
 }

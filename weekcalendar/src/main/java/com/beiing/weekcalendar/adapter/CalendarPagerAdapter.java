@@ -1,7 +1,6 @@
 package com.beiing.weekcalendar.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.beiing.weekcalendar.R;
+import com.beiing.weekcalendar.listener.DateSelectListener;
 import com.beiing.weekcalendar.listener.GetViewHelper;
 
 import org.joda.time.DateTime;
@@ -26,10 +26,12 @@ public class CalendarPagerAdapter extends RecyclingPagerAdapter {
     private Context context;
     private int maxCount;
     private int centerPosition;
-    /**本周第一天**/
+    /**开始显示周的第一天：默认显示今天所在的那一周**/
     private DateTime startDateTime;
-    private GetViewHelper getViewHelper;
+    /**日期选择:默认是今天**/
     private DateTime selectDateTime;
+    private GetViewHelper getViewHelper;
+    private DateSelectListener dateSelectListener;
 
     public CalendarPagerAdapter(Context context, int maxCount, DateTime startDateTime, GetViewHelper getViewHelper) {
         this.context = context;
@@ -42,7 +44,6 @@ public class CalendarPagerAdapter extends RecyclingPagerAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup container) {
-        Log.e("====", "CalendarPagerAdapter-getView");
         WeekViewHolder viewHolder;
         if(convertView == null){
             convertView = LayoutInflater.from(context).inflate(R.layout.item_calendar, container, false);
@@ -61,6 +62,9 @@ public class CalendarPagerAdapter extends RecyclingPagerAdapter {
                 selectDateTime = dayAdapter.getItem(position);
                 dayAdapter.setSelectDateTime(selectDateTime);
                 notifyDataSetChanged();
+                if(dateSelectListener != null){
+                    dateSelectListener.onDateSelect(selectDateTime);
+                }
             }
         });
         return convertView;
@@ -86,5 +90,18 @@ public class CalendarPagerAdapter extends RecyclingPagerAdapter {
 
     public DateTime getSelectDateTime() {
         return selectDateTime;
+    }
+
+    public void setDateSelectListener(DateSelectListener dateSelectListener) {
+        this.dateSelectListener = dateSelectListener;
+    }
+
+    public DateTime getStartDateTime() {
+        return startDateTime;
+    }
+
+    public void setStartDateTime(DateTime startDateTime) {
+        this.startDateTime = startDateTime;
+        notifyDataSetChanged();
     }
 }

@@ -11,9 +11,41 @@
         android:id="@+id/week_calendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:wc_headerBgColor="@color/colorAccent"
+        app:wc_headerBgColor="#ccc"
         app:wc_headerHeight="60dp"
-        app:wc_calendarHeight="100dp"
-        android:background="#22ff0000"/>
+        app:wc_calendarHeight="55dp" />
+
+    <TextView
+        android:id="@+id/tv_week_change"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"/>
+
+
+    <TextView
+        android:id="@+id/tv_select_date"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"/>
+
+    <Button
+        android:id="@+id/btn_add_event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="addEvent"
+        android:text="添加一个事件"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="gotoDate"
+        android:text="跳转到指定日期"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="gotoToday"
+        android:text="回到今天"/>
+
 
 </LinearLayout>
