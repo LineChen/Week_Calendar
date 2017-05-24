@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<DateTime> eventDates;
     private WeekCalendar weekCalendar;
+    private TextView currentFirstDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         tvSelectDate = (TextView) findViewById(R.id.tv_select_date);
         tvWeekChange = (TextView) findViewById(R.id.tv_week_change);
+        currentFirstDay = (TextView) findViewById(R.id.tv_current_firstday);
         eventDates = new ArrayList<>();
 
         weekCalendar = (WeekCalendar) findViewById(R.id.week_calendar);
@@ -115,5 +117,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void gotoToday(View view) {
         weekCalendar.gotoDate(new DateTime());
+    }
+
+    public void setSelectDate(View view) {
+        weekCalendar.setSelectDateTime(new DateTime().plusDays(1));
+    }
+
+    public void getCurrentFirstDay(View view) {
+        String text = "当前页面第一天：" + weekCalendar.getCurrentFirstDay().toString("yyyy年M月d日");
+        currentFirstDay.setText(text);
     }
 }

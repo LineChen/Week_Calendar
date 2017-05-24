@@ -112,7 +112,11 @@ weekCalendar.setWeekChangedListener(new WeekChangeListener() {
 
 - `getSelectDateTime` 获取当前选中日期
 
+- `setSelectDateTime(DateTime dateTime)` 设置选中日期
+
 - `gotoDate(DateTime dateTime)` 跳转到指定日期
+
+- `getCurrentFirstDay` 获取当前页面第一天
 
 - `refresh` 刷新界面
 

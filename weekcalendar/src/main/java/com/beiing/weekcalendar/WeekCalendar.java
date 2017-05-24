@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,7 @@ import com.beiing.weekcalendar.listener.GetViewHelper;
 import com.beiing.weekcalendar.listener.WeekChangeListener;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 /**
  * Created by linechen on 2017/5/18.<br/>
@@ -105,7 +105,7 @@ public class WeekCalendar extends LinearLayout {
         calendar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, calendarHeight));
         viewPagerContent = (ViewPager) calendar.findViewById(R.id.viewpager_calendar);
         addView(calendar);
-        DateTime startDay = new DateTime();
+        DateTime startDay = new DateTime(DateTimeZone.UTC);
         startDay = startDay.minusDays(startDay.getDayOfWeek() % DAYS_OF_WEEK);
         calendarPagerAdapter = new CalendarPagerAdapter(getContext(), maxCount, startDay, getViewHelper);
         viewPagerContent.setAdapter(calendarPagerAdapter);
@@ -144,18 +144,47 @@ public class WeekCalendar extends LinearLayout {
         this.weekChangedListener = weekChangedListener;
     }
 
+    /**
+     * 设置选中日期
+     * @param dateTime
+     */
+    public void setSelectDateTime(DateTime dateTime){
+        calendarPagerAdapter.setSelectDateTime(dateTime);
+    }
+
+    /**
+     * 获取选中日期
+     * @return
+     */
     public DateTime getSelectDateTime() {
         return calendarPagerAdapter.getSelectDateTime();
     }
 
+    /**
+     * 刷新界面
+     */
     public void refresh(){
         calendarPagerAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * 跳转到指定日期
+     * @param dateTime 指定日期
+     */
     public void gotoDate(DateTime dateTime){
         viewPagerContent.setCurrentItem(centerPosition);
         calendarPagerAdapter.setStartDateTime(dateTime.minusDays(dateTime.getDayOfWeek()));
         onWeekChange(centerPosition);
+    }
+
+    /**
+     * 获取当前页面第一天
+     * @return firstDayofWeek
+     */
+    public DateTime getCurrentFirstDay(){
+        int intervalWeeks = viewPagerContent.getCurrentItem() - centerPosition;
+        DateTime firstDayofWeek = calendarPagerAdapter.getStartDateTime().plusWeeks(intervalWeeks);
+        return firstDayofWeek;
     }
 
 }

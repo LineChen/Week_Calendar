@@ -11,8 +11,8 @@
         android:id="@+id/week_calendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:wc_headerBgColor="#ccc"
-        app:wc_headerHeight="60dp"
+        app:wc_headerBgColor="#fff"
+        app:wc_headerHeight="48dp"
         app:wc_calendarHeight="55dp" />
 
     <TextView
@@ -44,8 +44,26 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="setSelectDate"
+        android:text="设置明天为选中日期"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:onClick="gotoToday"
         android:text="回到今天"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="getCurrentFirstDay"
+        android:text="获取当前页面第一天"/>
+
+        <TextView
+            android:id="@+id/tv_current_firstday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
 
 
 </LinearLayout>
