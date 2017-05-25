@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setSelectDate(View view) {
-        weekCalendar.setSelectDateTime(new DateTime().plusDays(1));
+        weekCalendar.setSelectDateTime(new DateTime().plusDays((int) (Math.random() * 10)));
     }
 
     public void getCurrentFirstDay(View view) {

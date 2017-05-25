@@ -97,7 +97,6 @@ public class CalendarPagerAdapter extends RecyclingPagerAdapter {
         if(dateSelectListener != null){
             dateSelectListener.onDateSelect(selectDateTime);
         }
-        notifyDataSetChanged();
     }
 
     public void setDateSelectListener(DateSelectListener dateSelectListener) {

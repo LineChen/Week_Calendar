@@ -150,6 +150,7 @@ public class WeekCalendar extends LinearLayout {
      */
     public void setSelectDateTime(DateTime dateTime){
         calendarPagerAdapter.setSelectDateTime(dateTime);
+        gotoDate(dateTime);
     }
 
     /**
@@ -172,7 +173,7 @@ public class WeekCalendar extends LinearLayout {
      * @param dateTime 指定日期
      */
     public void gotoDate(DateTime dateTime){
-        viewPagerContent.setCurrentItem(centerPosition);
+        viewPagerContent.setCurrentItem(centerPosition, true);
         calendarPagerAdapter.setStartDateTime(dateTime.minusDays(dateTime.getDayOfWeek()));
         onWeekChange(centerPosition);
     }
@@ -183,8 +184,7 @@ public class WeekCalendar extends LinearLayout {
      */
     public DateTime getCurrentFirstDay(){
         int intervalWeeks = viewPagerContent.getCurrentItem() - centerPosition;
-        DateTime firstDayofWeek = calendarPagerAdapter.getStartDateTime().plusWeeks(intervalWeeks);
-        return firstDayofWeek;
+        return calendarPagerAdapter.getStartDateTime().plusWeeks(intervalWeeks);
     }
 
 }

@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         app:wc_headerBgColor="#fff"
         app:wc_headerHeight="48dp"
-        app:wc_calendarHeight="55dp" />
+        app:wc_calendarHeight="55dp"
+        android:background="@android:color/white"/>
 
     <TextView
         android:id="@+id/tv_week_change"
@@ -45,7 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="setSelectDate"
-        android:text="设置明天为选中日期"/>
+        android:text="设置指定日期为选中日期"/>
 
     <Button
         android:layout_width="match_parent"
