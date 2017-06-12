@@ -178,7 +178,8 @@ public class WeekCalendar extends LinearLayout {
      */
     public void gotoDate(DateTime dateTime){
         viewPagerContent.setCurrentItem(centerPosition, true);
-        calendarPagerAdapter.setStartDateTime(dateTime.minusDays(dateTime.getDayOfWeek()));
+        DateTime startDay = dateTime.minusDays(dateTime.getDayOfWeek() % DAYS_OF_WEEK);
+        calendarPagerAdapter.setStartDateTime(startDay);
         onWeekChange(centerPosition);
     }
 
