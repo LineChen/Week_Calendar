@@ -43,6 +43,8 @@ public class WeekCalendar extends LinearLayout {
 
     private int calendarHeight;
 
+    private boolean showWeek;
+
     /**
      * 日历星期
      */
@@ -79,6 +81,7 @@ public class WeekCalendar extends LinearLayout {
             headerHeight = (int) ta.getDimension(R.styleable.WeekCalendar_wc_headerHeight, getResources().getDimension(R.dimen.calender_header_height));
             headerBgColor = ta.getColor(R.styleable.WeekCalendar_wc_headerBgColor, Color.WHITE);
             calendarHeight = (int) ta.getDimension(R.styleable.WeekCalendar_wc_calendarHeight, getResources().getDimension(R.dimen.calender_content_height));
+            showWeek = ta.getBoolean(R.styleable.WeekCalendar_wc_show_week, true);
         } finally {
             ta.recycle();
         }
@@ -98,6 +101,7 @@ public class WeekCalendar extends LinearLayout {
         weekGrid = (GridView) header.findViewById(R.id.grid_week);
         addView(header);
         weekGrid.setAdapter(new WeekAdapter(getViewHelper));
+        header.setVisibility(showWeek ? VISIBLE : GONE);
     }
 
     private void addWeekView() {

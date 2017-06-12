@@ -14,6 +14,7 @@
         app:wc_headerBgColor="#fff"
         app:wc_headerHeight="48dp"
         app:wc_calendarHeight="55dp"
+        app:wc_show_week="false"
         android:background="@android:color/white"/>
 
     <TextView
