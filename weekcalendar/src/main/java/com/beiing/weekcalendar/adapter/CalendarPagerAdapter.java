@@ -1,7 +1,6 @@
 package com.beiing.weekcalendar.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,9 +94,6 @@ public class CalendarPagerAdapter extends RecyclingPagerAdapter {
 
     public void setSelectDateTime(DateTime selectDateTime) {
         this.selectDateTime = selectDateTime;
-        if(dateSelectListener != null){
-            dateSelectListener.onDateSelect(selectDateTime);
-        }
     }
 
     public void setDateSelectListener(DateSelectListener dateSelectListener) {
